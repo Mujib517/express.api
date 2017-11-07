@@ -1,15 +1,22 @@
 //common js.
 var http = require('http');
+var fs = require('fs');
 
+//callback
 function handleRequests(req, res) {
 
     switch (req.url) {
         case "/":
-            res.write("Hello NodeJS");
+            var content = fs.readFileSync("index.html");
+            res.write(content);
             res.end();
             break;
         case "/products":
-            res.write("List of products");
+            var products = [{ id: 1, brand: "Nokia", model: "N8", price: 100 },
+            { id: 2, brand: "Nokia", model: "N6", price: 300 },
+            { id: 3, brand: "Samsung", model: "S8", price: 900 }];
+
+            res.write(JSON.stringify(products));
             res.end();
             break;
         default:
@@ -20,7 +27,6 @@ function handleRequests(req, res) {
 }
 
 var server = http.createServer(handleRequests);
-server.listen(3000);
-
+server.listen(4000);
 
 console.log("Server is running");
