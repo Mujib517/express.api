@@ -1,32 +1,22 @@
-//common js.
-var http = require('http');
-var fs = require('fs');
+var express = require('express');
+var app = express();
 
-//callback
-function handleRequests(req, res) {
+var productCtrl = require('./controllers/product.ctrl');
+var defaultCtrl = require('./controllers/default.ctrl');
 
-    switch (req.url) {
-        case "/":
-            var content = fs.readFileSync("index.html");
-            res.write(content);
-            res.end();
-            break;
-        case "/products":
-            var products = [{ id: 1, brand: "Nokia", model: "N8", price: 100 },
-            { id: 2, brand: "Nokia", model: "N6", price: 300 },
-            { id: 3, brand: "Samsung", model: "S8", price: 900 }];
+var productRouter = require('./routes/product.router');
+var defaultRouter = require('./routes/default.router');
 
-            res.write(JSON.stringify(products));
-            res.end();
-            break;
-        default:
-            res.write("Hello NodeJS");
-            res.end();
-            break;
-    }
-}
+app.listen(4000);
 
-var server = http.createServer(handleRequests);
-server.listen(4000);
+app.use('/', defaultRouter);
+app.use('/api/products', productRouter);
 
-console.log("Server is running");
+//1xx  == peding
+//2xx  == success  200, 201, 204
+//3xx  == redirections 301
+//4xx  == client errors 404 not found 
+//5xx  == Server errors  501 500
+
+
+console.log("Server is running...");
