@@ -3,19 +3,44 @@ var Product = require('../models/product.model'); //ODM ORM
 function ProductCtrl() {
 
     this.get = function (req, res) {
+        var pageSize= +req.params.pageSize || 10;
+        var pageIndex= +req.params.pageIndex || 0;
 
-        Product.find({}, function (err, products) {
+        Product.count()
+            .exec()
+            .then(function(count){
 
-            if (err) {
+                //deferred execution
+                var query=Product.find();
+
+                query.skip(pageIndex*pageSize);
+
+                query.limit(pageSize);
+
+
+              query
+                    .exec()
+                    .then(function(products){
+                        var metadata={
+                            totalRecords:count,
+                            totalPages: Math.ceil(count/pageSize)
+                        };
+                        var response={
+                            metadata:metadata,
+                            products:products
+                        };
+                        res.status(200); //OK
+                        res.json(response);
+                    })
+                    .catch(function(err){
+                        res.status(500);
+                        res.send(err);
+                    });
+            })
+            .catch(function(err){
                 res.status(500);
-                res.send("Internal Server Error");
-            }
-            else {
-                res.status(200); //OK
-                res.json(products);
-            }
-        });
-
+                res.send(err);
+            });
     };
 
     this.getById = function (req, res) {

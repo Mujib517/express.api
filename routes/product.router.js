@@ -2,8 +2,11 @@ var express = require('express');
 var router = express.Router();
 var productCtrl = require('./../controllers/product.ctrl');
 
-//GET http://localhost:3000/products/
-router.get('/', productCtrl.get);
+//GET http://localhost:3000/api/products/
+//GET http://localhost:3000/api/products/0/10
+router.get('/',productCtrl.get);
+router.get('/:pageIndex/:pageSize', productCtrl.get);
+
 router.get('/:id', productCtrl.getById);
 router.post('/', productCtrl.save);
 router.delete('/:id', productCtrl.delete);
