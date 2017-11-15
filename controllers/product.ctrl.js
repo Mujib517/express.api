@@ -3,44 +3,39 @@ var Product = require('../models/product.model'); //ODM ORM
 function ProductCtrl() {
 
     this.get = function (req, res) {
-        var pageSize= +req.params.pageSize || 10;
-        var pageIndex= +req.params.pageIndex || 0;
+        var pageSize = +req.params.pageSize || 10;
+        var pageIndex = +req.params.pageIndex || 0;
+        var count = 0;
+        //deferred execution
+        var query = Product
+            .find()
+            .skip(pageIndex * pageSize)
+            .limit(pageSize);
+
 
         Product.count()
             .exec()
-            .then(function(count){
-
-                //deferred execution
-                var query=Product.find();
-
-                query.skip(pageIndex*pageSize);
-
-                query.limit(pageSize);
-
-
-              query
-                    .exec()
-                    .then(function(products){
-                        var metadata={
-                            totalRecords:count,
-                            totalPages: Math.ceil(count/pageSize)
-                        };
-                        var response={
-                            metadata:metadata,
-                            products:products
-                        };
-                        res.status(200); //OK
-                        res.json(response);
-                    })
-                    .catch(function(err){
-                        res.status(500);
-                        res.send(err);
-                    });
+            .then(function (count) {
+                count = count;
+                return query.exec();
             })
-            .catch(function(err){
+            .then(function (products) {
+                var metadata = {
+                    totalRecords: count,
+                    totalPages: Math.ceil(count / pageSize)
+                };
+                var response = {
+                    metadata: metadata,
+                    products: products
+                };
+                res.status(200); //OK
+                res.json(response);
+            })
+            .catch(function (err) {
                 res.status(500);
                 res.send(err);
             });
+
     };
 
     this.getById = function (req, res) {
@@ -70,7 +65,7 @@ function ProductCtrl() {
 
             if (err) {
                 res.status(500); //Internal Server Error
-                res.send("Internal Server Error");
+                res.send(err);
                 //log to file
             }
             else {

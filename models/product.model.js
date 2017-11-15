@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 
 var productModel = mongoose.model("Product", {
-    brand: String,
-    model: String,
-    inStock: Boolean,
-    lastUpdated: Date,
+    brand: { type: String, required: true },
+    model: { type: String, required: true },
+    inStock: { type: Boolean, default: true },
+    lastUpdated: { type: Date, default: Date.now },
     price: Number,
     color: String
 });
