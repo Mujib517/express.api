@@ -15,8 +15,8 @@ function ProductCtrl() {
 
         Product.count()
             .exec()
-            .then(function (count) {
-                count = count;
+            .then(function (cnt) {
+                count = cnt;
                 return query.exec();
             })
             .then(function (products) {

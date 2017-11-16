@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var jwt = require('jsonwebtoken');
 var app = express();
 
 var productRouter = require('./routes/product.router');
@@ -26,15 +27,20 @@ app.use('/api/users', userRouter);
 
 function authenticate(req, res, next) {
 
-    if (req.headers["username"] === 'admin' && req.headers["password"] === 'admin')
-        next();
-    else {
-        res.status(401);
-        res.send("Unauthorized");
-    }
+    var user = jwt.verify(req.headers["authorization"], "secret", function (err) {
+        if (!err)
+            next();
+        else {
+            res.status(401);
+            res.send("unauthorized");
+        }
+    });
+
+
 }
 
 app.use(authenticate);
+
 
 //private
 app.use('/api/products', productRouter);
