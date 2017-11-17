@@ -2,6 +2,10 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
+var morgan = require('morgan');
+var fs = require('fs');
+var path = require('path');
+
 var app = express();
 
 var productRouter = require('./routes/product.router');
@@ -18,6 +22,10 @@ mongoose.connection.openUri("mongodb://admin:admin@ds163595.mlab.com:63595/produ
 
 mongoose.Promise = global.Promise;
 
+//G:\myproject\express.api\logx.txt
+var fileStream = fs.createWriteStream(path.join(__dirname, "logs.txt"), { flags: 'a' });
+
+app.use(morgan('combined', { stream: fileStream }));
 app.use(bodyParser.json());
 
 app.use('/', defaultRouter);
@@ -39,8 +47,9 @@ function authenticate(req, res, next) {
 
 }
 
-app.use(authenticate);
+//app.use(authenticate);
 
 
 //private
 app.use('/api/products', productRouter);
+

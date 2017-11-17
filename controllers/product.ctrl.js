@@ -1,14 +1,17 @@
 var Product = require('../models/product.model'); //ODM ORM
+var Review = require('../models/review.model');
 
 function ProductCtrl() {
 
     this.get = function (req, res) {
         var pageSize = +req.params.pageSize || 10;
         var pageIndex = +req.params.pageIndex || 0;
+
         var count = 0;
         //deferred execution
         var query = Product
             .find()
+            .sort("-lastUpdated")     //  -brand
             .skip(pageIndex * pageSize)
             .limit(pageSize);
 
@@ -43,16 +46,27 @@ function ProductCtrl() {
 
         Product.findById(id, function (err, product) {
             if (product) {
-                res.status(200);
-                res.json(product);
+
+                var productResponse = product.toJSON();
+
+                Review.find({ productId: id })
+                    .sort("-lastUpdated")
+                    .exec()
+                    .then(function (reviews) {
+                        productResponse.reviews = reviews;
+                        res.status(200);
+                        res.json(productResponse);
+                    })
+                    .catch(function () {
+                        res.status(500);
+                        res.send("Internal Server Error");
+                    });
             }
             else {
                 res.status(404);
                 res.send("Not found");
             }
         });
-
-
     };
 
     this.save = function (req, res) {
