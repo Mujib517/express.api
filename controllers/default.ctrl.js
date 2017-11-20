@@ -4,7 +4,7 @@ var logger = require('../utilities/logger');
 var Ctrl = {
     get: function (req, res) {
         logger.error({ name: "test" });
-        res.send("Hello Expess!");
+        res.send("Hello Expess! " + process.pid);
     },
 
     health: function (req, res) {

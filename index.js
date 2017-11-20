@@ -5,6 +5,8 @@ var jwt = require('jsonwebtoken');
 var morgan = require('morgan');
 var fs = require('fs');
 var path = require('path');
+var os = require('os');
+var cluster = require('cluster');
 
 var app = express();
 
@@ -14,9 +16,22 @@ var userRouter = require('./routes/user.router');
 
 var port = process.env.PORT || 3000;
 
-app.listen(port, function () {
-    console.log("Server is running...");
+if (cluster.isMaster) {
+    var cores = os.cpus().length;
+    console.log(cores);
+    for (var i = 0; i < cores; i++)
+        cluster.fork();
+}
+else {
+    app.listen(port, function () {
+        console.log("Server is running...", process.pid);
+    });
+}
+
+cluster.on('exit', function () {
+    cluster.fork();
 });
+
 
 //mongoose.connection.openUri("mongodb://localhost:27017/products");
 mongoose.connection.openUri("mongodb://admin:admin@ds163595.mlab.com:63595/products");
