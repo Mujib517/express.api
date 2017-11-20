@@ -1,5 +1,9 @@
+
+var logger = require('../utilities/logger');
+
 var Ctrl = {
     get: function (req, res) {
+        logger.error({ name: "test" });
         res.send("Hello Expess!");
     },
 

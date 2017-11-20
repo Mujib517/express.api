@@ -70,7 +70,7 @@ function ProductCtrl() {
     };
 
     this.save = function (req, res) {
-
+        var createdBy=req.params.email;
         var product = new Product(req.body);
 
         console.log(req.body);

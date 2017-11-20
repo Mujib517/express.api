@@ -1,17 +1,26 @@
 var User = require('../models/user.model');
 var jwt = require('jsonwebtoken');
 
+var logger = require('../utilities/logger');
+
 module.exports = {
 
     register: function (req, res) {
         var user = new User(req.body); //payload
 
         user.save(function (err) {
+            logger.info({ msg: "Success" });
             if (!err) {
                 res.status(201);
                 res.send("Registered");
             }
             else {
+                var log={
+                    source:'User Controller',
+                    handler:'Save handler',
+                    err:err
+                };
+                logger.error(log);
                 res.status(500);
                 if (err && err.errmsg && err.errmsg.indexOf("E11000 duplicate key error index") > -1)
                     res.send("Email already exists");
@@ -19,7 +28,6 @@ module.exports = {
                     res.send(err);
             }
         });
-
     },
 
     login: function (req, res) {
