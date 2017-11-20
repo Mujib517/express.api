@@ -12,7 +12,9 @@ var productRouter = require('./routes/product.router');
 var defaultRouter = require('./routes/default.router');
 var userRouter = require('./routes/user.router');
 
-app.listen(3000, function () {
+var port = process.env.PORT || 3000;
+
+app.listen(port, function () {
     console.log("Server is running...");
 });
 
