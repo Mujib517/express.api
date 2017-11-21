@@ -8,6 +8,7 @@ var path = require('path');
 var os = require('os');
 //var cluster = require('cluster');
 
+
 var app = express();
 
 var productRouter = require('./routes/product.router');
@@ -32,7 +33,7 @@ app.listen(port, function () {
 //     cluster.fork();
 // });
 
-
+app.use(express.static("uploads/"));
 //mongoose.connection.openUri("mongodb://localhost:27017/products");
 mongoose.connection.openUri("mongodb://admin:admin@ds163595.mlab.com:63595/products");
 

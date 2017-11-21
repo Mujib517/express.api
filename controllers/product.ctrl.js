@@ -27,10 +27,23 @@ function ProductCtrl() {
                     totalRecords: count,
                     totalPages: Math.ceil(count / pageSize)
                 };
+
+
+
                 var response = {
                     metadata: metadata,
                     products: products
                 };
+
+                var jsonProducts = products.toJSON();
+                console.log(jsonProducts);
+                for (var i = 0; i < jsonProducts; i++) {
+                    var prod = jsonProducts[i];
+                    prod.img = "http://localhost:3000/" + prod.img;
+                }
+
+                response.products = jsonProducts;
+
                 res.status(200); //OK
                 res.json(response);
             })
@@ -85,6 +98,8 @@ function ProductCtrl() {
 
     this.save = function (req, res) {
         var createdBy = req.params.email;
+        req.body.img = req.uploadedImg;
+
         var product = new Product(req.body);
 
         console.log(req.body);

@@ -6,7 +6,8 @@ var productModel = mongoose.model("Product", {
     inStock: { type: Boolean, default: true },
     lastUpdated: { type: Date, default: Date.now },
     price: Number,
-    color: String
+    color: String,
+    img: { type: String }
 });
 
 module.exports = productModel;
