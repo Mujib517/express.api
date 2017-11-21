@@ -53,9 +53,23 @@ function ProductCtrl() {
                     .sort("-lastUpdated")
                     .exec()
                     .then(function (reviews) {
-                        productResponse.reviews = reviews;
-                        res.status(200);
-                        res.json(productResponse);
+
+                        Review.aggregate(
+                            [
+                                { $match: { productId: id } },
+                                { $group: { _id: "$productId", avgRating: { $avg: "$rating" } } }
+                            ]
+                        )
+                            .then(function (ratings) {
+                                productResponse.reviews = reviews;
+                                if (ratings && ratings.length > 0) {
+                                    productResponse.avgRating = ratings[0].avgRating;
+                                }
+
+                                res.status(200);
+                                res.json(productResponse);
+                            });
+
                     })
                     .catch(function () {
                         res.status(500);
@@ -70,7 +84,7 @@ function ProductCtrl() {
     };
 
     this.save = function (req, res) {
-        var createdBy=req.params.email;
+        var createdBy = req.params.email;
         var product = new Product(req.body);
 
         console.log(req.body);
