@@ -28,8 +28,10 @@ function ProductCtrl() {
                     totalPages: Math.ceil(count / pageSize)
                 };
 
+                var url = req.protocol + "://" + req.get('host') + "/";
+
                 for (var i = 0; i < products.length; i++) {
-                    products[i].img = products[i].img ? "http://localhost:3000/" + products[i].img : "";
+                    products[i].img = products[i].img ? url + products[i].img : "";
                 }
 
                 var response = {
