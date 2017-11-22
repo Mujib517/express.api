@@ -28,21 +28,14 @@ function ProductCtrl() {
                     totalPages: Math.ceil(count / pageSize)
                 };
 
-
+                for (var i = 0; i < products.length; i++) {
+                    products[i].img = products[i].img ? "http://localhost:3000/" + products[i].img : "";
+                }
 
                 var response = {
                     metadata: metadata,
                     products: products
                 };
-
-                var jsonProducts = products.toJSON();
-                console.log(jsonProducts);
-                for (var i = 0; i < jsonProducts; i++) {
-                    var prod = jsonProducts[i];
-                    prod.img = "http://localhost:3000/" + prod.img;
-                }
-
-                response.products = jsonProducts;
 
                 res.status(200); //OK
                 res.json(response);
