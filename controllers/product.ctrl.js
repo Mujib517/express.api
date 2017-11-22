@@ -74,6 +74,8 @@ function ProductCtrl() {
                                     productResponse.avgRating = ratings[0].avgRating;
                                 }
 
+                                productResponse.img = productResponse.img ? req.protocol + "://" + req.get('host') + "/" + productResponse.img : "";
+
                                 res.status(200);
                                 res.json(productResponse);
                             });
