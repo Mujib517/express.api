@@ -25,7 +25,7 @@ var port = process.env.PORT || 3000;
 //         cluster.fork();
 // }
 // else {
-app.listen(4000, function () {
+app.listen(port, function () {
     console.log("Server is running...", process.pid);
 });
 //}
