@@ -6,6 +6,7 @@ var morgan = require('morgan');
 var fs = require('fs');
 var path = require('path');
 var os = require('os');
+var cors = require('cors');
 //var cluster = require('cluster');
 
 
@@ -24,7 +25,7 @@ var port = process.env.PORT || 3000;
 //         cluster.fork();
 // }
 // else {
-app.listen(port, function () {
+app.listen(4000, function () {
     console.log("Server is running...", process.pid);
 });
 //}
@@ -32,7 +33,7 @@ app.listen(port, function () {
 // cluster.on('exit', function () {
 //     cluster.fork();
 // });
-
+app.use(cors());
 app.use(express.static("uploads/"));
 //mongoose.connection.openUri("mongodb://localhost:27017/products");
 mongoose.connection.openUri("mongodb://admin:admin@ds163595.mlab.com:63595/products");
