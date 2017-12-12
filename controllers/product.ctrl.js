@@ -128,9 +128,6 @@ function ProductCtrl() {
                 res.send("Internal Server Error");
             }
         });
-
-        res.status(204);//no content
-        res.send();
     };
 
     this.update = function (req, res) {
