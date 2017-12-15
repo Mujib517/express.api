@@ -66,7 +66,7 @@ function authenticate(req, res, next) {
     console.log(user);
 }
 
-//app.use(authenticate);
+app.use(authenticate);
 
 
 //private
