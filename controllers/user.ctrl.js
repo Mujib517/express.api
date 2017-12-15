@@ -50,7 +50,7 @@ module.exports = {
                     if (validation) {
                         res.status(200);
                         var token = jwt.sign({ email: user.email, role: 'admin' }, "secret", {
-                            expiresIn: "5m"
+                            expiresIn: "30m"
                         });
 
                         var response = {
